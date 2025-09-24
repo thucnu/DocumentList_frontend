@@ -1,8 +1,14 @@
 import React from "react";
 
-const DocumentsTableComponent = ({ documents, isAdmin, onDelete, onView, loading }) => (
-  <div className="overflow-x-auto">
-    <table className="min-w-full bg-white rounded-xl shadow border border-gray-200">
+const DocumentsTableComponent = ({
+  documents,
+  isAdmin,
+  onDelete,
+  onView,
+  loading,
+}) => (
+  <div className="w-full overflow-x-auto">
+    <table className="w-full bg-white rounded-xl shadow border border-gray-200">
       <thead>
         <tr className="bg-blue-900 text-white">
           <th className="py-2 px-3 text-center">STT</th>
