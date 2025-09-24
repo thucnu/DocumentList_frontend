@@ -53,13 +53,16 @@ const App = () => {
     // eslint-disable-next-line
   }, [search]);
 
-  // Debounce search input
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearch(searchInput);
-    }, 500); // 500ms debounce
-    return () => clearTimeout(handler);
-  }, [searchInput]);
+  // Explicit search: only update 'search' when user clicks search
+  const handleSearch = () => {
+    setSearch(searchInput);
+  };
+
+  // Hiển thị tất cả tài liệu (reset search)
+  const handleShowAll = () => {
+    setSearchInput("");
+    setSearch("");
+  };
 
   const handleLogin = (jwt, admin) => {
     setSearchInput("");
@@ -78,7 +81,6 @@ const App = () => {
   };
 
   const handleDelete = async (doc) => {
-    if (!window.confirm(`Xóa tài liệu "${doc.name}"?`)) return;
     try {
       await axios.delete(`/files/${doc._id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -117,10 +119,21 @@ const App = () => {
                     <div className="flex-1">
                       {/* Chỉ admin mới thấy ImportForm và nút xóa */}
                       {isAdmin && <ImportForm onImported={handleImported} />}
-                      <SearchBar
-                        value={searchInput}
-                        onChange={setSearchInput}
-                      />
+                      <div className="relative mb-6">
+                        <SearchBar
+                          value={searchInput}
+                          onChange={setSearchInput}
+                          onSearch={handleSearch}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleShowAll}
+                          className="absolute right-0 top-1/2 -translate-y-1/2 px-4 py-1 rounded bg-gray-300 text-gray-900 font-semibold hover:bg-gray-400 transition"
+                          style={{ zIndex: 2 }}
+                        >
+                          Hiển thị tất cả
+                        </button>
+                      </div>
                       <div style={{ minHeight: 320 }}>
                         {loading ? (
                           <div className="text-center py-10 text-gray-500">
