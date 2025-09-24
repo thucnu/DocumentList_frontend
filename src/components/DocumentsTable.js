@@ -1,20 +1,14 @@
 import React from "react";
 
-const DocumentsTable = ({ documents, isAdmin, onDelete, onView }) => {
-  return (
-    <table
-      style={{ width: "100%", borderCollapse: "collapse", margin: "24px 0" }}
-    >
+const DocumentsTableComponent = ({ documents, isAdmin, onDelete, onView, loading }) => (
+  <div className="overflow-x-auto">
+    <table className="min-w-full bg-white rounded-xl shadow border border-gray-200">
       <thead>
-        <tr style={{ background: "#f5f5f5" }}>
-          <th style={{ padding: 8, border: "1px solid #ddd" }}>STT</th>
-          <th style={{ padding: 8, border: "1px solid #ddd" }}>Tên tài liệu</th>
-          <th style={{ padding: 8, border: "1px solid #ddd" }}>
-            Nhóm tài liệu
-          </th>
-          {isAdmin && (
-            <th style={{ padding: 8, border: "1px solid #ddd" }}>Xóa</th>
-          )}
+        <tr className="bg-blue-900 text-white">
+          <th className="py-2 px-3 text-center">STT</th>
+          <th className="py-2 px-3 text-left">Tên tài liệu</th>
+          <th className="py-2 px-3 text-left">Nhóm tài liệu</th>
+          {isAdmin && <th className="py-2 px-3 text-center">Xóa</th>}
         </tr>
       </thead>
       <tbody>
@@ -22,56 +16,32 @@ const DocumentsTable = ({ documents, isAdmin, onDelete, onView }) => {
           <tr>
             <td
               colSpan={isAdmin ? 4 : 3}
-              style={{ textAlign: "center", padding: 16 }}
+              className="py-6 text-center text-gray-500"
             >
               Không có tài liệu nào
             </td>
           </tr>
         ) : (
           documents.map((doc, idx) => (
-            <tr key={doc._id}>
+            <tr
+              key={doc._id}
+              className={`hover:bg-blue-50 ${
+                idx % 2 === 0 ? "bg-gray-50" : "bg-white"
+              }`}
+            >
+              <td className="py-2 px-3 text-center">{idx + 1}</td>
               <td
-                style={{
-                  padding: 8,
-                  border: "1px solid #ddd",
-                  textAlign: "center",
-                }}
-              >
-                {idx + 1}
-              </td>
-              <td
-                style={{
-                  padding: 8,
-                  border: "1px solid #ddd",
-                  color: "#1976d2",
-                  cursor: "pointer",
-                  textDecoration: "underline",
-                }}
+                className="py-2 px-3 text-blue-900 underline cursor-pointer"
                 onClick={() => onView(doc)}
               >
                 {doc.name}
               </td>
-              <td style={{ padding: 8, border: "1px solid #ddd" }}>
-                {doc.group}
-              </td>
+              <td className="py-2 px-3">{doc.group}</td>
               {isAdmin && (
-                <td
-                  style={{
-                    padding: 8,
-                    border: "1px solid #ddd",
-                    textAlign: "center",
-                  }}
-                >
+                <td className="py-2 px-3 text-center">
                   <button
                     onClick={() => onDelete(doc)}
-                    style={{
-                      background: "#d32f2f",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: 4,
-                      padding: "4px 12px",
-                      cursor: "pointer",
-                    }}
+                    className="px-3 py-1 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition"
                   >
                     Xóa
                   </button>
@@ -82,7 +52,14 @@ const DocumentsTable = ({ documents, isAdmin, onDelete, onView }) => {
         )}
       </tbody>
     </table>
-  );
-};
+    {loading && (
+      <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-10">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-900 mr-2"></div>
+        <span className="text-blue-900 font-semibold">Đang tải dữ liệu...</span>
+      </div>
+    )}
+  </div>
+);
 
+const DocumentsTable = React.memo(DocumentsTableComponent);
 export default DocumentsTable;

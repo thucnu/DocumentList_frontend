@@ -48,66 +48,54 @@ const ImportForm = ({ onImported }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        maxWidth: 400,
-        margin: "24px auto",
-        padding: 24,
-        border: "1px solid #eee",
-        borderRadius: 8,
-      }}
-    >
-      <h3>Import tài liệu</h3>
-      <div style={{ marginBottom: 12 }}>
-        <input
-          type="text"
-          placeholder="Tên tài liệu"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          style={{ width: "100%", padding: 8 }}
-        />
-      </div>
-      <div style={{ marginBottom: 12 }}>
-        <select
-          value={group}
-          onChange={(e) => setGroup(e.target.value)}
-          style={{ width: "100%", padding: 8 }}
+    <div className="bg-white rounded-xl shadow-md p-6 mb-6 max-w-lg mx-auto">
+      <h3 className="text-lg font-semibold text-blue-900 mb-4">
+        Import tài liệu mới
+      </h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            placeholder="Tên tài liệu"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 bg-gray-50"
+          />
+        </div>
+        <div>
+          <select
+            value={group}
+            onChange={(e) => setGroup(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50"
+          >
+            {groupOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx,.txt"
+            onChange={(e) => setFile(e.target.files[0])}
+            required
+            className="w-full"
+            ref={fileInputRef}
+          />
+        </div>
+        {error && <div className="text-red-600 text-sm">{error}</div>}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-2 bg-blue-900 text-white rounded font-semibold shadow hover:bg-blue-800 transition"
         >
-          {groupOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div style={{ marginBottom: 12 }}>
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx,.txt"
-          onChange={(e) => setFile(e.target.files[0])}
-          required
-          style={{ width: "100%" }}
-          ref={fileInputRef}
-        />
-      </div>
-      {error && <div style={{ color: "red", marginBottom: 8 }}>{error}</div>}
-      <button
-        type="submit"
-        disabled={loading}
-        style={{
-          width: "100%",
-          padding: 10,
-          background: "#388e3c",
-          color: "#fff",
-          border: "none",
-          borderRadius: 4,
-        }}
-      >
-        {loading ? "Đang import..." : "Import"}
-      </button>
-    </form>
+          {loading ? "Đang import..." : "Import"}
+        </button>
+      </form>
+    </div>
   );
 };
 
