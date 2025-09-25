@@ -67,7 +67,7 @@ const LoginForm = ({ onLogin }) => {
             )}
             <button
               type="submit"
-              className="w-full py-2 bg-blue-900 text-white rounded-full font-semibold shadow hover:bg-blue-800 transition"
+              className="w-full py-2 bg-red-700 text-white rounded-full font-semibold shadow hover:bg-red-800 transition"
             >
               Đăng nhập
             </button>

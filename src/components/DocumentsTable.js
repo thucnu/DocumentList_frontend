@@ -26,7 +26,7 @@ const DocumentsTableComponent = ({
     <div className="w-full overflow-x-auto relative">
       <table className="w-full bg-white rounded-xl shadow border border-gray-200">
         <thead>
-          <tr className="bg-blue-900 text-white">
+          <tr className="bg-gray-400 text-white">
             <th className="py-2 px-3 text-center">STT</th>
             <th className="py-2 px-3 text-left">Tên tài liệu</th>
             <th className="py-2 px-3 text-left">Nhóm tài liệu</th>

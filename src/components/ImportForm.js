@@ -49,7 +49,7 @@ const ImportForm = ({ onImported }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6 mb-6 max-w-lg mx-auto">
-      <h3 className="text-lg font-semibold text-blue-900 mb-4">
+      <h3 className="text-lg font-semibold text-black mb-4">
         Thêm tài liệu mới
       </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -60,7 +60,7 @@ const ImportForm = ({ onImported }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 bg-gray-50"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-800 bg-gray-50"
           />
         </div>
         <div>
@@ -86,11 +86,11 @@ const ImportForm = ({ onImported }) => {
             ref={fileInputRef}
           />
         </div>
-        {error && <div className="text-red-600 text-sm">{error}</div>}
+        {error && <div className="text-gray-600 text-sm">{error}</div>}
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2 bg-blue-900 text-white rounded font-semibold shadow hover:bg-blue-800 transition"
+          className="w-full py-2 bg-red-700 text-white rounded font-semibold shadow hover:bg-red-800 transition"
         >
           {loading ? "Đang import..." : "Import"}
         </button>
