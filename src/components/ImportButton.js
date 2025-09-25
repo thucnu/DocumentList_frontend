@@ -14,14 +14,15 @@ const ImportButton = ({ onImportSuccess }) => {
     const [header, ...body] = rows;
     const objects = body.map((row, idx) => ({
       stt: row[0] || idx + 1,
-      fullname: row[1] || "",
-      birthDate: row[2] || "",
-      address: row[3] || "",
-      position: row[4] || "",
-      // image: row[5] || "", // Commented out image logic
+      full_name: row[1] || "",
+      date_of_birth: row[2] || "",
+      hometown: row[3] || "",
+      title: row[4] || "",
+      image_filename: row[5] || "",
+      checked_in: row[6] === true ? true : false
     }));
     try {
-      await axios.post("delegates/import", { delegates: objects });
+      await axios.post("attendees/import", { attendees: objects });
       onImportSuccess();
     } catch (err) {
       alert("Import thất bại!");

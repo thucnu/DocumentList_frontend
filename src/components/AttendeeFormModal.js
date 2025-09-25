@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 
-const DelegateFormModal = ({ open, delegate, onClose, onSave }) => {
+const AttendeeFormModal = ({ open, attendee, onClose, onSave }) => {
   const [form, setForm] = useState({
-    stt: "",
-    fullname: "",
-    birthDate: "",
-    address: "",
-    position: "",
-    // image: "", // Commented out image logic
+    full_name: "",
+    date_of_birth: "",
+    hometown: "",
+    title: "",
+    image_filename: ""
   });
 
   useEffect(() => {
-    if (delegate) setForm(delegate);
-  }, [delegate]);
+    if (attendee) setForm(attendee);
+  }, [attendee]);
 
   if (!open) return null;
 
@@ -35,39 +34,39 @@ const DelegateFormModal = ({ open, delegate, onClose, onSave }) => {
           Sửa thông tin đại biểu
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          {/* <input
-            name="image"
-            value={form.image}
-            onChange={handleChange}
-            placeholder="Ảnh cá nhân (base64/link)"
-            className="border p-2 rounded"
-          /> */}
           <input
-            name="fullname"
-            value={form.fullname}
+            name="full_name"
+            value={form.full_name}
             onChange={handleChange}
             placeholder="Họ và tên"
             className="border p-2 rounded"
           />
           <input
-            name="birthDate"
-            value={form.birthDate}
+            name="date_of_birth"
+            value={form.date_of_birth}
             onChange={handleChange}
-            placeholder="Ngày Sinh"
+            placeholder="Ngày sinh (dd/MM/yyyy)"
             className="border p-2 rounded"
           />
           <input
-            name="address"
-            value={form.address}
+            name="hometown"
+            value={form.hometown}
             onChange={handleChange}
-            placeholder="Nơi ở hiện tại"
+            placeholder="Quê quán"
             className="border p-2 rounded"
           />
           <input
-            name="position"
-            value={form.position}
+            name="title"
+            value={form.title}
             onChange={handleChange}
-            placeholder="Chức vụ - Đơn vị công tác"
+            placeholder="Chức vụ"
+            className="border p-2 rounded"
+          />
+          <input
+            name="image_filename"
+            value={form.image_filename}
+            onChange={handleChange}
+            placeholder="Tên file ảnh (vd: 1.png)"
             className="border p-2 rounded"
           />
         </div>
@@ -91,4 +90,4 @@ const DelegateFormModal = ({ open, delegate, onClose, onSave }) => {
   );
 };
 
-export default DelegateFormModal;
+export default AttendeeFormModal;

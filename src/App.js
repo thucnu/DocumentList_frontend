@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BannerHeader from "./components/BannerHeader";
 import MenuBar from "./components/MenuBar";
-import DelegatesPage from "./pages/DelegatesPage";
+import AttendeesPage from "./pages/AttendeesPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import axios from "./api/axios";
 
@@ -94,9 +94,9 @@ const App = () => {
                   onLogout={handleLogout}
                 />
               );
-            case "delegates":
+            case "attendees":
               return (
-                <DelegatesPage
+                <AttendeesPage
                   isAdmin={isAdmin}
                   token={token}
                   username={username}

@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
-import DelegatesTable from "../components/DelegatesTable";
-import DelegateFormModal from "../components/DelegateFormModal";
+import AttendeesTable from "../components/AttendeesTable";
+import AttendeeFormModal from "../components/AttendeeFormModal";
 import ImportButton from "../components/ImportButton";
 import SearchBar from "../components/SearchBar";
 import LoginForm from "../components/LoginForm";
 
-const DelegatesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
-  const [delegates, setDelegates] = useState([]);
+const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
+  const [attendees, setAttendees] = useState([]);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [selectedDelegate, setSelectedDelegate] = useState(null);
+  const [selectedAttendee, setSelectedAttendee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
-  const fetchDelegates = async () => {
+  const fetchAttendees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/delegates", {
-        params: search ? { fullname: search } : {},
+      const res = await axios.get("/attendees", {
+        params: search ? { full_name: search } : {},
       });
-      setDelegates(res.data);
+      setAttendees(res.data);
     } catch {
-      setDelegates([]);
+      setAttendees([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDelegates();
+    fetchAttendees();
     // eslint-disable-next-line
   }, [search]);
 
@@ -43,31 +43,31 @@ const DelegatesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
   };
 
   const handleImportSuccess = () => {
-    fetchDelegates();
+    fetchAttendees();
   };
 
-  const handleEdit = (delegate) => {
-    setSelectedDelegate(delegate);
+  const handleEdit = (attendee) => {
+    setSelectedAttendee(attendee);
   };
 
   const handleSave = async (updated) => {
-  const { _id, fullname, birthDate, address, position } = updated;
-  // Parse birthDate từ chuỗi dd/MM/yyyy sang Date
-  let parsedBirthDate = birthDate;
-  const match = birthDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (typeof birthDate === "string" && match) {
-    const [day, month, year] = match.slice(1);
-    parsedBirthDate = new Date(Number(year), Number(month) - 1, Number(day));
-  }
-  const data = { fullname, birthDate: parsedBirthDate, address, position };
-  await axios.put(`delegates/${_id}`, data);
-  setSelectedDelegate(null);
-  fetchDelegates();
-};
+    const { _id, full_name, date_of_birth, hometown, title, image_filename } = updated;
+    // Parse date_of_birth từ chuỗi dd/MM/yyyy sang Date
+    let parsedBirthDate = date_of_birth;
+    const match = date_of_birth.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (typeof date_of_birth === "string" && match) {
+      const [day, month, year] = match.slice(1);
+      parsedBirthDate = new Date(Number(year), Number(month) - 1, Number(day));
+    }
+    const data = { full_name, date_of_birth: parsedBirthDate, hometown, title, image_filename };
+    await axios.put(`attendees/${_id}`, data);
+    setSelectedAttendee(null);
+    fetchAttendees();
+  };
 
-  const handleDelete = async (delegate) => {
-    await axios.delete(`/delegates/${delegate._id}`);
-    fetchDelegates();
+  const handleDelete = async (attendee) => {
+    await axios.delete(`/attendees/${attendee._id}`);
+    fetchAttendees();
   };
 
   return (
@@ -98,8 +98,8 @@ const DelegatesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
                 Đang tải dữ liệu...
               </div>
             ) : (
-              <DelegatesTable
-                delegates={Array.isArray(delegates) ? delegates : []}
+              <AttendeesTable
+                attendees={Array.isArray(attendees) ? attendees : []}
                 isAdmin={isAdmin}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -109,10 +109,10 @@ const DelegatesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
           </div>
         </div>
       </div>
-      <DelegateFormModal
-        open={!!selectedDelegate}
-        delegate={selectedDelegate}
-        onClose={() => setSelectedDelegate(null)}
+      <AttendeeFormModal
+        open={!!selectedAttendee}
+        attendee={selectedAttendee}
+        onClose={() => setSelectedAttendee(null)}
         onSave={handleSave}
       />
       {!token && (
@@ -150,4 +150,4 @@ const DelegatesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
   );
 };
 
-export default DelegatesPage;
+export default AttendeesPage;

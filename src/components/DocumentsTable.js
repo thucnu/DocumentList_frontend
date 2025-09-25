@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 const DocumentsTableComponent = ({
   documents,
@@ -24,9 +25,9 @@ const DocumentsTableComponent = ({
 
   return (
     <div className="w-full overflow-x-auto relative">
-      <table className="w-full bg-white rounded-xl shadow border border-gray-200">
+      <table className="w-full bg-white rounded-xl shadow border border-red-200">
         <thead>
-          <tr className="bg-gray-400 text-white">
+          <tr className="bg-red-700 text-white">
             <th className="py-2 px-3 text-center">STT</th>
             <th className="py-2 px-3 text-left">Tên tài liệu</th>
             <th className="py-2 px-3 text-left">Nhóm tài liệu</th>
@@ -63,9 +64,9 @@ const DocumentsTableComponent = ({
                   <td className="py-2 px-3 text-center">
                     <button
                       onClick={() => handleDeleteClick(doc)}
-                      className="px-3 py-1 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition"
+                      className="px-3 py-1 rounded text-red-700 font-semibold"
                     >
-                      Xóa
+                      <TrashIcon className="h-5 w-5 inline" />
                     </button>
                   </td>
                 )}

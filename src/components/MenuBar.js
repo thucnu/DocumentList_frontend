@@ -7,7 +7,7 @@ const menuItems = [
   },
   {
     label: "Danh sách đại biểu Đảng bộ Thành Phố",
-    key: "delegates",
+    key: "attendees",
   },
 ];
 
