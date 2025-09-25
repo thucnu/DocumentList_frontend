@@ -96,7 +96,16 @@ const DocumentModal = ({ open, document, onClose }) => {
         >
           Đóng
         </button>
-        <h3 style={{ margin: 0, padding: 24, fontSize: 22 }}>
+        <h3
+          style={{
+            margin: 0,
+            padding: 24,
+            fontSize: 22,
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
           {document.name}
         </h3>
         {loading && <div style={{ padding: 24 }}>Đang tải...</div>}

@@ -5,13 +5,13 @@ const AttendeesTable = ({ attendees, isAdmin, onEdit, onDelete }) => {
       <table className="w-full table-fixed bg-white rounded-xl shadow border border-red-200">
         <thead>
           <tr className="bg-red-700 text-white">
-            <th className="px-2 py-2 text-center min-w-[36px]">STT</th>
-            <th className="px-2 py-2 text-left min-w-[180px]">Họ và Tên</th>
-            <th className="px-2 py-2 text-left min-w-[140px]">Ngày Sinh</th>
-            <th className="px-2 py-2 text-left min-w-[180px]">Quê quán</th>
-            <th className="px-2 py-2 text-left min-w-[200px]">Chức vụ</th>
+            <th className="px-2 py-2 text-center" style={{ width: "50px" }}>STT</th>
+            <th className="px-2 py-2 text-left" style={{ width: "180px" }}>Họ và Tên</th>
+            <th className="px-2 py-2 text-left" style={{ width: "140px" }}>Ngày Sinh</th>
+            <th className="px-2 py-2 text-left" style={{ width: "180px" }}>Quê quán</th>
+            <th className="px-2 py-2 text-left" style={{ width: "200px" }}>Chức vụ</th>
             {isAdmin && (
-              <th className="px-2 py-2 text-center min-w-[100px]">Actions</th>
+              <th className="px-2 py-2 text-center" style={{ width: "100px" }}>Actions</th>
             )}
           </tr>
         </thead>

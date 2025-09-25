@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "../api/axios";
 
 const groupOptions = [
@@ -13,7 +13,7 @@ const ImportForm = ({ onImported }) => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const fileInputRef = React.useRef();
+  const fileInputRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +77,7 @@ const ImportForm = ({ onImported }) => {
           </select>
         </div>
         <div>
+          <label className="block mb-1 font-medium">File tài liệu</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx,.txt"

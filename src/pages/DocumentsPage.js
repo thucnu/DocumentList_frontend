@@ -3,7 +3,6 @@ import ImportForm from "../components/ImportForm";
 import SearchBar from "../components/SearchBar";
 import DocumentsTable from "../components/DocumentsTable";
 import DocumentModal from "../components/DocumentModal";
-import LoginForm from "../components/LoginForm";
 import axios from "../api/axios";
 
 const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
@@ -69,14 +68,16 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
               placeholder="Tìm kiếm theo tên tài liệu..."
               className="bg-white border border-red-300 text-red-700 placeholder-red-400"
             />
-            <button
-              type="button"
-              onClick={handleShowAll}
-              className="absolute right-0 top-1/2 -translate-y-1/2 px-4 py-1 rounded bg-gray-400 text-white font-semibold hover:bg-gray-500 transition border border-gray-300"
-              style={{ zIndex: 2 }}
-            >
-              Hiển thị tất cả
-            </button>
+            {search && (
+              <button
+                type="button"
+                onClick={handleShowAll}
+                className="absolute right-0 top-1/2 -translate-y-1/2 px-4 py-1 rounded bg-gray-400 text-white font-semibold hover:bg-gray-500 transition border border-gray-300"
+                style={{ zIndex: 2 }}
+              >
+                Hiển thị tất cả
+              </button>
+            )}
           </div>
           <div style={{ minHeight: 320 }}>
             {loading ? (
@@ -89,7 +90,6 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
                 isAdmin={isAdmin}
                 onDelete={isAdmin ? handleDelete : undefined}
                 onView={setSelectedDoc}
-                loading={loading}
               />
             )}
           </div>
@@ -100,37 +100,6 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
         document={selectedDoc}
         onClose={() => setSelectedDoc(null)}
       />
-      {!token && (
-        <div className="mt-6 text-center">
-          <span className="text-black">Bạn là khách (Anonymous). </span>
-          <button
-            className="ml-2 px-3 py-1 bg-red-700 text-white rounded hover:bg-red-800 border border-red-300"
-            onClick={() => setShowLogin(true)}
-          >
-            Đăng nhập quản trị
-          </button>
-        </div>
-      )}
-      {showLogin && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full relative border border-gray-300">
-            {/* Close button at top right */}
-            <button
-              className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl font-bold focus:outline-none"
-              onClick={() => setShowLogin(false)}
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-            <LoginForm
-              onLogin={(jwt, admin) => {
-                onLogin(jwt, admin);
-                setShowLogin(false);
-              }}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

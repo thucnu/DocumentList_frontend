@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BannerHeader from "./components/BannerHeader";
 import MenuBar from "./components/MenuBar";
 import AttendeesPage from "./pages/AttendeesPage";
 import DocumentsPage from "./pages/DocumentsPage";
+import LoginPage from "./pages/LoginPage";
 import axios from "./api/axios";
+import { Outlet } from "react-router-dom";
+
+const Layout = ({ isAdmin, username, onLogout }) => (
+  <div className="min-h-screen bg-gray-100 font-sans">
+    <BannerHeader />
+    <MenuBar isAdmin={isAdmin} username={username} onLogout={onLogout} />
+    <div className="mx-auto px-2 py-6">
+      <Outlet />
+    </div>
+  </div>
+);
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState("");
   const [documents, setDocuments] = useState([]);
-  const [currentPage, setCurrentPage] = useState("documents");
   const [search, setSearch] = useState(""); // used for API
   const [searchInput, setSearchInput] = useState(""); // used for input field
   const [loading, setLoading] = useState(false);
@@ -18,8 +30,10 @@ const App = () => {
   useEffect(() => {
     if (token) {
       setIsAdmin(JSON.parse(localStorage.getItem("isAdmin") || "false"));
+      setUsername(localStorage.getItem("username") || "");
     } else {
       setIsAdmin(false);
+      setUsername("");
     }
   }, [token]);
 
@@ -29,7 +43,6 @@ const App = () => {
       const res = await axios.get("/files", {
         params: search ? { name: search } : {},
       });
-      // So sánh dữ liệu mới với dữ liệu cũ
       const newDocs = res.data;
       if (
         documents.length !== newDocs.length ||
@@ -53,11 +66,10 @@ const App = () => {
     setSearchInput("");
     setToken(jwt);
     setIsAdmin(admin);
-    // Giả sử backend trả về username, nếu không thì có thể lấy từ localStorage hoặc props
-    setUsername("Admin"); // Nếu có username thực tế, hãy truyền vào đây
+    setUsername("Admin"); // TODO: thay bằng username thực tế từ backend
     localStorage.setItem("token", jwt);
     localStorage.setItem("isAdmin", JSON.stringify(admin));
-    localStorage.setItem("username", "Admin"); // Nếu có username thực tế, hãy truyền vào đây
+    localStorage.setItem("username", "Admin");
     fetchDocuments();
   };
 
@@ -72,48 +84,70 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      <BannerHeader />
-      <MenuBar
-        isAdmin={isAdmin}
-        username={username}
-        onLogout={handleLogout}
-        onMenuSelect={setCurrentPage}
-        currentPage={currentPage}
-      />
-      <div className="mx-auto px-2 py-6">
-        {(() => {
-          switch (currentPage) {
-            case "documents":
-              return (
-                <DocumentsPage
-                  isAdmin={isAdmin}
-                  token={token}
-                  username={username}
-                  onLogin={handleLogin}
-                  onLogout={handleLogout}
-                />
-              );
-            case "attendees":
-              return (
-                <AttendeesPage
-                  isAdmin={isAdmin}
-                  token={token}
-                  username={username}
-                  onLogin={handleLogin}
-                  onLogout={handleLogout}
-                />
-              );
-            default:
-              return (
-                <div className="bg-white rounded-xl shadow p-8 text-center text-lg font-semibold text-blue-900">
-                  Trang này sẽ được cập nhật nội dung sau.
-                </div>
-              );
+    <Router>
+      <Routes>
+        {/* Route cho trang login */}
+        <Route
+          path="/login"
+          element={
+            <LoginPage
+              onLogin={(jwt, admin) => {
+                handleLogin(jwt, admin);
+                window.location.href = "/";
+              }}
+            />
           }
-        })()}
-      </div>
-    </div>
+        />
+
+        {/* Route cha chứa layout chung */}
+        <Route element={<Layout isAdmin={isAdmin} username={username} onLogout={handleLogout} />}>
+          <Route
+            path="/"
+            element={
+              <DocumentsPage
+                isAdmin={isAdmin}
+                token={token}
+                username={username}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+              />
+            }
+          />
+          <Route
+            path="/documents"
+            element={
+              <DocumentsPage
+                isAdmin={isAdmin}
+                token={token}
+                username={username}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+              />
+            }
+          />
+          <Route
+            path="/attendees"
+            element={
+              <AttendeesPage
+                isAdmin={isAdmin}
+                token={token}
+                username={username}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+              />
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <div className="bg-white rounded-xl shadow p-8 text-center text-lg font-semibold text-blue-900">
+                Trang này sẽ được cập nhật nội dung sau.
+              </div>
+            }
+          />
+        </Route>
+      </Routes>
+    </Router>
   );
 };
 
