@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "../api/axios";
-import AttendeesTable from "../components/AttendeesTable";
-import AttendeeFormModal from "../components/AttendeeFormModal";
-import ImportButton from "../components/ImportButton";
-import SearchBar from "../components/SearchBar";
-import LoginForm from "../components/LoginForm";
+import React, { useState, useEffect } from 'react';
+import axios from '../api/axios';
+import AttendeesTable from '../components/AttendeesTable';
+import AttendeeFormModal from '../components/AttendeeFormModal';
+import ImportButton from '../components/ImportButton';
+import SearchBar from '../components/SearchBar';
 
 const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
   const [attendees, setAttendees] = useState([]);
-  const [search, setSearch] = useState("");
-  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [selectedAttendee, setSelectedAttendee] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
 
   const fetchAttendees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/attendees", {
+      const res = await axios.get('/attendees', {
         params: search ? { full_name: search } : {},
       });
       setAttendees(res.data);
@@ -38,8 +36,8 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
   };
 
   const handleShowAll = () => {
-    setSearchInput("");
-    setSearch("");
+    setSearchInput('');
+    setSearch('');
   };
 
   const handleImportSuccess = () => {
@@ -51,12 +49,11 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
   };
 
   const handleSave = async (updated) => {
-    const { _id, full_name, date_of_birth, hometown, title, image_filename } =
-      updated;
+    const { _id, full_name, date_of_birth, hometown, title, image_filename } = updated;
     // Parse date_of_birth từ chuỗi dd/MM/yyyy sang Date
     let parsedBirthDate = date_of_birth;
     const match = date_of_birth.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (typeof date_of_birth === "string" && match) {
+    if (typeof date_of_birth === 'string' && match) {
       const [day, month, year] = match.slice(1);
       parsedBirthDate = new Date(Number(year), Number(month) - 1, Number(day));
     }
@@ -103,9 +100,7 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
           </div>
           <div style={{ minHeight: 320 }}>
             {loading ? (
-              <div className="text-center py-10 text-red-400">
-                Đang tải dữ liệu...
-              </div>
+              <div className="text-center py-10 text-red-400">Đang tải dữ liệu...</div>
             ) : (
               <AttendeesTable
                 attendees={Array.isArray(attendees) ? attendees : []}
@@ -118,12 +113,7 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
           </div>
         </div>
       </div>
-      <AttendeeFormModal
-        open={!!selectedAttendee}
-        attendee={selectedAttendee}
-        onClose={() => setSelectedAttendee(null)}
-        onSave={handleSave}
-      />
+      <AttendeeFormModal open={!!selectedAttendee} attendee={selectedAttendee} onClose={() => setSelectedAttendee(null)} onSave={handleSave} />
     </>
   );
 };

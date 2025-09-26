@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BannerHeader from "./components/BannerHeader";
-import MenuBar from "./components/MenuBar";
-import AttendeesPage from "./pages/AttendeesPage";
-import DocumentsPage from "./pages/DocumentsPage";
-import LoginPage from "./pages/LoginPage";
-import axios from "./api/axios";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import BannerHeader from './components/BannerHeader';
+import MenuBar from './components/MenuBar';
+import AttendeesPage from './pages/AttendeesPage';
+import DocumentsPage from './pages/DocumentsPage';
+import LoginPage from './pages/LoginPage';
+import axios from './api/axios';
+import { Outlet } from 'react-router-dom';
 
 const Layout = ({ isAdmin, username, onLogout }) => (
   <div className="min-h-screen bg-gray-100 font-sans">
@@ -19,35 +19,32 @@ const Layout = ({ isAdmin, username, onLogout }) => (
 );
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const [documents, setDocuments] = useState([]);
-  const [search, setSearch] = useState(""); // used for API
-  const [searchInput, setSearchInput] = useState(""); // used for input field
-  const [loading, setLoading] = useState(false);
+  const [search] = useState(''); // used for API
+  const [, setSearchInput] = useState(''); // used for input field
+  const [, setLoading] = useState(false);
 
   useEffect(() => {
     if (token) {
-      setIsAdmin(JSON.parse(localStorage.getItem("isAdmin") || "false"));
-      setUsername(localStorage.getItem("username") || "");
+      setIsAdmin(JSON.parse(localStorage.getItem('isAdmin') || 'false'));
+      setUsername(localStorage.getItem('username') || '');
     } else {
       setIsAdmin(false);
-      setUsername("");
+      setUsername('');
     }
   }, [token]);
 
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/files", {
+      const res = await axios.get('/files', {
         params: search ? { name: search } : {},
       });
       const newDocs = res.data;
-      if (
-        documents.length !== newDocs.length ||
-        documents.some((doc, i) => doc._id !== newDocs[i]?._id)
-      ) {
+      if (documents.length !== newDocs.length || documents.some((doc, i) => doc._id !== newDocs[i]?._id)) {
         setDocuments(newDocs);
       }
     } catch {
@@ -63,24 +60,24 @@ const App = () => {
   }, [search]);
 
   const handleLogin = (jwt, admin) => {
-    setSearchInput("");
+    setSearchInput('');
     setToken(jwt);
     setIsAdmin(admin);
-    setUsername("Admin"); // TODO: thay bằng username thực tế từ backend
-    localStorage.setItem("token", jwt);
-    localStorage.setItem("isAdmin", JSON.stringify(admin));
-    localStorage.setItem("username", "Admin");
+    setUsername('Admin'); // TODO: thay bằng username thực tế từ backend
+    localStorage.setItem('token', jwt);
+    localStorage.setItem('isAdmin', JSON.stringify(admin));
+    localStorage.setItem('username', 'Admin');
     fetchDocuments();
   };
 
   const handleLogout = () => {
-    setSearchInput("");
-    setToken("");
+    setSearchInput('');
+    setToken('');
     setIsAdmin(false);
-    setUsername("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("isAdmin");
-    localStorage.removeItem("username");
+    setUsername('');
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('username');
   };
 
   return (
@@ -93,7 +90,7 @@ const App = () => {
             <LoginPage
               onLogin={(jwt, admin) => {
                 handleLogin(jwt, admin);
-                window.location.href = "/";
+                window.location.href = '/';
               }}
             />
           }
@@ -103,39 +100,15 @@ const App = () => {
         <Route element={<Layout isAdmin={isAdmin} username={username} onLogout={handleLogout} />}>
           <Route
             path="/"
-            element={
-              <DocumentsPage
-                isAdmin={isAdmin}
-                token={token}
-                username={username}
-                onLogin={handleLogin}
-                onLogout={handleLogout}
-              />
-            }
+            element={<DocumentsPage isAdmin={isAdmin} token={token} username={username} onLogin={handleLogin} onLogout={handleLogout} />}
           />
           <Route
             path="/documents"
-            element={
-              <DocumentsPage
-                isAdmin={isAdmin}
-                token={token}
-                username={username}
-                onLogin={handleLogin}
-                onLogout={handleLogout}
-              />
-            }
+            element={<DocumentsPage isAdmin={isAdmin} token={token} username={username} onLogin={handleLogin} onLogout={handleLogout} />}
           />
           <Route
             path="/attendees"
-            element={
-              <AttendeesPage
-                isAdmin={isAdmin}
-                token={token}
-                username={username}
-                onLogin={handleLogin}
-                onLogout={handleLogout}
-              />
-            }
+            element={<AttendeesPage isAdmin={isAdmin} token={token} username={username} onLogin={handleLogin} onLogout={handleLogout} />}
           />
           <Route
             path="*"

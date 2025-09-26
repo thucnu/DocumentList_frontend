@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import ImportForm from "../components/ImportForm";
-import SearchBar from "../components/SearchBar";
-import DocumentsTable from "../components/DocumentsTable";
-import axios from "../api/axios";
+import React, { useState, useEffect } from 'react';
+import ImportForm from '../components/ImportForm';
+import SearchBar from '../components/SearchBar';
+import DocumentsTable from '../components/DocumentsTable';
+import axios from '../api/axios';
 
 const DocumentsPage = ({ isAdmin, token }) => {
   const [documents, setDocuments] = useState([]);
-  const [search, setSearch] = useState("");
-  const [searchInput, setSearchInput] = useState("");
-  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/files", {
+      const res = await axios.get('/files', {
         params: search ? { name: search } : {},
       });
       setDocuments(res.data);
@@ -32,8 +31,8 @@ const DocumentsPage = ({ isAdmin, token }) => {
 
   const handleSearch = () => setSearch(searchInput);
   const handleShowAll = () => {
-    setSearchInput("");
-    setSearch("");
+    setSearchInput('');
+    setSearch('');
   };
   const handleImported = () => fetchDocuments();
   const handleDelete = async (doc) => {
@@ -47,7 +46,7 @@ const DocumentsPage = ({ isAdmin, token }) => {
 
   // Khi click vào tên file, mở tab mới với đường dẫn file
   const handleView = (doc) => {
-    window.open(doc.path, "_blank");
+    window.open(process.env.REACT_APP_API_BASE_URL + `/${doc.path}`, '_blank');
   };
 
   return (
@@ -76,9 +75,7 @@ const DocumentsPage = ({ isAdmin, token }) => {
           </div>
           <div style={{ minHeight: 320 }}>
             {loading ? (
-              <div className="text-center py-10 text-red-400">
-                Đang tải dữ liệu...
-              </div>
+              <div className="text-center py-10 text-red-400">Đang tải dữ liệu...</div>
             ) : (
               <DocumentsTable
                 documents={Array.isArray(documents) ? documents : []}
