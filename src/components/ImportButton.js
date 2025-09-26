@@ -30,7 +30,7 @@ const ImportButton = ({ onImportSuccess }) => {
   };
 
   return (
-    <label className="cursor-pointer absolute px-4 py-2 bg-red-700 text-white font-bold rounded hover:bg-red-800">
+    <label className="cursor-pointer px-4 py-2 bg-red-700 text-white font-bold rounded hover:bg-red-800">
       Import Excel (.xlsx)
       <input type="file" accept=".xlsx" className="hidden" onChange={handleImport} />
     </label>

@@ -76,10 +76,9 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 md:flex-row md:items-start">
-        <div className="flex-1 bg-white rounded-xl shadow p-6 border border-red-200">
-          <div className="relative mb-6">
-            {isAdmin && <ImportButton onImportSuccess={handleImportSuccess} />}
+      <div className="px-6">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-4">
             <SearchBar
               value={searchInput}
               onChange={setSearchInput}
@@ -91,26 +90,27 @@ const AttendeesPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
               <button
                 type="button"
                 onClick={handleShowAll}
-                className="absolute right-0 top-1/2 -translate-y-1/2 px-4 py-1 rounded bg-gray-400 text-white font-semibold hover:bg-gray-500 transition border border-gray-300"
+                className="px-4 py-1 rounded bg-gray-400 text-white font-semibold hover:bg-gray-500 transition border border-gray-300"
                 style={{ zIndex: 2 }}
               >
                 Hiển thị tất cả
               </button>
             )}
           </div>
-          <div style={{ minHeight: 320 }}>
-            {loading ? (
-              <div className="text-center py-10 text-red-400">Đang tải dữ liệu...</div>
-            ) : (
-              <AttendeesTable
-                attendees={Array.isArray(attendees) ? attendees : []}
-                isAdmin={isAdmin}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                loading={loading}
-              />
-            )}
-          </div>
+          {isAdmin && <ImportButton onImportSuccess={handleImportSuccess} />}
+        </div>
+        <div style={{ minHeight: 320 }}>
+          {loading ? (
+            <div className="text-center py-10 text-red-400">Đang tải dữ liệu...</div>
+          ) : (
+            <AttendeesTable
+              attendees={Array.isArray(attendees) ? attendees : []}
+              isAdmin={isAdmin}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              loading={loading}
+            />
+          )}
         </div>
       </div>
       <AttendeeFormModal open={!!selectedAttendee} attendee={selectedAttendee} onClose={() => setSelectedAttendee(null)} onSave={handleSave} />

@@ -39,13 +39,21 @@ const DocumentsTableComponent = ({ documents, isAdmin, onDelete, onView, loading
             documents.map((doc, idx) => (
               <tr key={doc._id} className={`hover:bg-blue-50 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                 <td className="py-2 px-3 text-center">{idx + 1}</td>
-                <td
-                  className="py-2 px-3 text-blue-900 underline cursor-pointer"
-                  // onClick={() => onView(doc)}
-                >
-                  <a href={`${process.env.REACT_APP_API_BASE_URL}/${doc.path}`} target="_blank" rel="noreferrer">
-                    {doc.name}
-                  </a>
+                <td className="py-2 px-3">
+                  {doc.originalName.toLowerCase().endsWith('.pdf') ? (
+                    <span className="text-blue-900 underline cursor-pointer" onClick={() => onView(doc)}>
+                      {doc.name}
+                    </span>
+                  ) : (
+                    <a
+                      href={`${process.env.REACT_APP_API_BASE_URL}/${doc.path}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-900 underline"
+                    >
+                      {doc.name}
+                    </a>
+                  )}
                 </td>
                 <td className="py-2 px-3">{doc.group}</td>
                 {isAdmin && (

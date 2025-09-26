@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import axios from "../api/axios";
-import quochuy from "../assets/quochuy.gif";
+import React, { useState } from 'react';
+import axios from '../api/axios';
+import quochuy from '../assets/quochuy.gif';
 
 const LoginForm = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     try {
-      const res = await axios.post("/auth/login", { username, password });
-      localStorage.setItem("token", res.data.token);
+      const res = await axios.post('/auth/login', { username: username.toLowerCase(), password });
+      localStorage.setItem('token', res.data.token);
       onLogin(res.data.token, res.data.isAdmin);
-      setPassword("");
+      setPassword('');
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
+      setError(err.response?.data?.error || 'Login failed');
     }
   };
 
@@ -26,18 +26,12 @@ const LoginForm = ({ onLogin }) => {
         {/* Logo quốc huy (placeholder) */}
         <div className="mb-6 flex justify-center">
           <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center shadow">
-            <img
-              src={quochuy}
-              alt="Logo Quốc Huy"
-              className="w-16 h-16 object-contain"
-            />
+            <img src={quochuy} alt="Logo Quốc Huy" className="w-16 h-16 object-contain" />
             {/* <span className="text-3xl text-gray-400">🏛️</span> */}
           </div>
         </div>
         {/* Tiêu đề lớn */}
-        <h1 className="text-2xl md:text-2xl font-bold text-blue-00 mb-6 text-center tracking-wide">
-          Hệ thống Quản lý Văn Bản
-        </h1>
+        <h1 className="text-2xl md:text-2xl font-bold text-blue-00 mb-6 text-center tracking-wide">Hệ thống Quản lý Văn Bản</h1>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
@@ -59,13 +53,8 @@ const LoginForm = ({ onLogin }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-800 bg-gray-50 text-gray-900"
             />
           </div>
-          {error && (
-            <div className="text-red-600 mb-3 text-sm text-center">{error}</div>
-          )}
-          <button
-            type="submit"
-            className="w-full py-2 bg-red-700 text-white rounded-full font-semibold shadow hover:bg-red-800 transition"
-          >
+          {error && <div className="text-red-600 mb-3 text-sm text-center">{error}</div>}
+          <button type="submit" className="w-full py-2 bg-red-700 text-white rounded-full font-semibold shadow hover:bg-red-800 transition">
             Đăng nhập
           </button>
         </form>

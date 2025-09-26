@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import ImportForm from '../components/ImportForm';
 import SearchBar from '../components/SearchBar';
 import DocumentsTable from '../components/DocumentsTable';
+import DocumentsThumbnail from '../components/DocumentsThumbnail';
 import axios from '../api/axios';
 
 const DocumentsPage = ({ isAdmin, token }) => {
@@ -9,6 +11,8 @@ const DocumentsPage = ({ isAdmin, token }) => {
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState('thumbnail'); // 'thumbnail' or 'list'
+  const [showModal, setShowModal] = useState(false);
 
   const fetchDocuments = async () => {
     setLoading(true);
@@ -43,6 +47,9 @@ const DocumentsPage = ({ isAdmin, token }) => {
       fetchDocuments();
     } catch {}
   };
+  const toggleViewMode = () => {
+    setViewMode(viewMode === 'thumbnail' ? 'list' : 'thumbnail');
+  };
 
   // Khi click vào tên file, mở tab mới với trang view fullscreen
   const handleView = (doc) => {
@@ -52,10 +59,9 @@ const DocumentsPage = ({ isAdmin, token }) => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 md:flex-row md:items-start">
-        <div className="flex-1 bg-white rounded-xl shadow p-6 border border-red-200">
-          {isAdmin && <ImportForm onImported={handleImported} />}
-          <div className="relative mb-6">
+      <div className="px-12">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="relative">
             <SearchBar
               value={searchInput}
               onChange={setSearchInput}
@@ -74,11 +80,38 @@ const DocumentsPage = ({ isAdmin, token }) => {
               </button>
             )}
           </div>
-          <div style={{ minHeight: 320 }}>
+
+          {isAdmin && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800 transition whitespace-nowrap"
+            >
+              Thêm tài liệu
+            </button>
+          )}
+        </div>
+
+        <div className=" bg-white rounded-xl shadow p-6 border border-red-200 h-full relative">
+          {/* Top row with button, search, and view toggle */}
+          <button
+            onClick={toggleViewMode}
+            className="px-3 py-2 bg-red-700 text-white rounded hover:bg-red-600 transition absolute top-4 right-6"
+            title={viewMode === 'thumbnail' ? 'Chuyển sang danh sách' : 'Chuyển sang thumbnail'}
+          >
+            {viewMode === 'thumbnail' ? <ListBulletIcon className="w-5 h-5" /> : <Squares2X2Icon className="w-5 h-5" />}
+          </button>
+          <div className="py-10" style={{ minHeight: 320 }}>
             {loading ? (
               <div className="text-center py-10 text-red-400">Đang tải dữ liệu...</div>
-            ) : (
+            ) : viewMode === 'list' ? (
               <DocumentsTable
+                documents={Array.isArray(documents) ? documents : []}
+                isAdmin={isAdmin}
+                onDelete={isAdmin ? handleDelete : undefined}
+                onView={handleView}
+              />
+            ) : (
+              <DocumentsThumbnail
                 documents={Array.isArray(documents) ? documents : []}
                 isAdmin={isAdmin}
                 onDelete={isAdmin ? handleDelete : undefined}
@@ -88,6 +121,26 @@ const DocumentsPage = ({ isAdmin, token }) => {
           </div>
         </div>
       </div>
+
+      {/* Modal for Import Form */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-red-700">Thêm tài liệu mới</h2>
+              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700 text-2xl">
+                ×
+              </button>
+            </div>
+            <ImportForm
+              onImported={() => {
+                handleImported();
+                setShowModal(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
