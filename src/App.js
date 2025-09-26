@@ -5,6 +5,7 @@ import MenuBar from './components/MenuBar';
 import AttendeesPage from './pages/AttendeesPage';
 import DocumentsPage from './pages/DocumentsPage';
 import LoginPage from './pages/LoginPage';
+import DocumentViewer from './pages/DocumentViewer';
 import axios from './api/axios';
 import { Outlet } from 'react-router-dom';
 
@@ -119,6 +120,7 @@ const App = () => {
             }
           />
         </Route>
+        <Route path="/view/:encodedPath" element={<DocumentViewer />} />
       </Routes>
     </Router>
   );

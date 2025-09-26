@@ -44,9 +44,10 @@ const DocumentsPage = ({ isAdmin, token }) => {
     } catch {}
   };
 
-  // Khi click vào tên file, mở tab mới với đường dẫn file
+  // Khi click vào tên file, mở tab mới với trang view fullscreen
   const handleView = (doc) => {
-    window.open(process.env.REACT_APP_API_BASE_URL + `/${doc.path}`, '_blank');
+    const encodedPath = encodeURIComponent(doc.path);
+    window.open(`${window.location.origin}/view/${encodedPath}`, '_blank');
   };
 
   return (
