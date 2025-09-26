@@ -38,13 +38,13 @@ const AttendeesTable = ({ attendees, isAdmin, onEdit, onDelete }) => {
               Họ và Tên
             </th>
             <th className="px-2 py-2 text-left" style={{ width: '140px' }}>
-              Ngày Sinh
+              Ngày sinh
             </th>
             <th className="px-2 py-2 text-left" style={{ width: '180px' }}>
               Quê quán
             </th>
             <th className="px-2 py-2 text-left" style={{ width: '200px' }}>
-              Chức vụ
+              Chức danh
             </th>
             {isAdmin && (
               <th className="px-2 py-2 text-center" style={{ width: '100px' }}>
