@@ -59,7 +59,7 @@ const DocumentsPage = ({ isAdmin, token }) => {
 
   return (
     <>
-      <div className="px-12">
+      <div className="px-6">
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="relative">
             <SearchBar
