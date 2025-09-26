@@ -17,11 +17,11 @@ const BannerHeader = () => (
       <img
         src={flagLogo}
         alt="Cờ Đảng"
-        className="w-40 h-40 object-contain drop-shadow-lg"
+        className="w-[7rem] h-[7rem] object-contain drop-shadow-lg"
       />
     </div>
     <div className="mx-auto text-center py-6">
-      <div className="text-2xl md:text-3xl font-extrabold text-red-700 uppercase tracking-wide leading-tight">
+      <div className="text-xl md:text-2xl font-extrabold text-red-700 uppercase tracking-wide leading-tight">
         ĐẠI HỘI ĐẠI BIỂU ĐẢNG BỘ THÀNH PHỐ CẦN THƠ
       </div>
       <div className="text-lg md:text-xl font-bold text-red-700 mt-2">

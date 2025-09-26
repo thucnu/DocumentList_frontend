@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react";
 import ImportForm from "../components/ImportForm";
 import SearchBar from "../components/SearchBar";
 import DocumentsTable from "../components/DocumentsTable";
-import DocumentModal from "../components/DocumentModal";
 import axios from "../api/axios";
 
-const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
+const DocumentsPage = ({ isAdmin, token }) => {
   const [documents, setDocuments] = useState([]);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
 
   const fetchDocuments = async () => {
     setLoading(true);
@@ -19,8 +17,7 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
       const res = await axios.get("/files", {
         params: search ? { name: search } : {},
       });
-      const newDocs = res.data;
-      setDocuments(newDocs);
+      setDocuments(res.data);
     } catch {
       setDocuments([]);
     } finally {
@@ -33,19 +30,12 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
     // eslint-disable-next-line
   }, [search]);
 
-  const handleSearch = () => {
-    setSearch(searchInput);
-  };
-
+  const handleSearch = () => setSearch(searchInput);
   const handleShowAll = () => {
     setSearchInput("");
     setSearch("");
   };
-
-  const handleImported = () => {
-    fetchDocuments();
-  };
-
+  const handleImported = () => fetchDocuments();
   const handleDelete = async (doc) => {
     try {
       await axios.delete(`/files/${doc._id}`, {
@@ -53,6 +43,11 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
       });
       fetchDocuments();
     } catch {}
+  };
+
+  // Khi click vào tên file, mở tab mới với đường dẫn file
+  const handleView = (doc) => {
+    window.open(doc.path, "_blank");
   };
 
   return (
@@ -89,17 +84,12 @@ const DocumentsPage = ({ isAdmin, token, username, onLogin, onLogout }) => {
                 documents={Array.isArray(documents) ? documents : []}
                 isAdmin={isAdmin}
                 onDelete={isAdmin ? handleDelete : undefined}
-                onView={setSelectedDoc}
+                onView={handleView}
               />
             )}
           </div>
         </div>
       </div>
-      <DocumentModal
-        open={!!selectedDoc}
-        document={selectedDoc}
-        onClose={() => setSelectedDoc(null)}
-      />
     </>
   );
 };
